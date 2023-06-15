@@ -23,14 +23,10 @@ namespace GrandClickr.Controllers
             var SAStoken = Configuration["ConnectionStrings:SAStoken"];
             string path = $"https://stgcdotnetah2023grp3.blob.core.windows.net/{container}/{image}.jpg?{SAStoken}";
             
-            // Get a temporary path on disk where we can download the file
-            string downloadPath = $"{image}.jpg";
+            // Download the private blob
+            var blob = new BlobClient(new Uri(path)).DownloadStreamingAsync();
 
-            // Download the public blob at https://aka.ms/bloburl
-            await new BlobClient(new Uri(path)).DownloadToAsync(downloadPath);
-
-            Byte[] b = System.IO.File.ReadAllBytes(downloadPath);
-            return File(b, "image/jpeg");
+            return File(blob.Result.Value.Content, "image/jpeg");
         }
 
         // GET api/<AzStorageController>/5
