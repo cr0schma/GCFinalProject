@@ -1,5 +1,6 @@
 ﻿using GrandClickr.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -16,11 +17,37 @@ namespace GrandClickr.Controllers
             _context = context;
         }
 
+        private List<UserName> GetUserNamesTest()
+        {
+            List<UserName> users = new List<UserName>();
+            foreach (UserName user in _context.UserNames)
+            {
+                users.Add(user);
+            }
+
+            
+
+            return users;
+        }
+
+        private List<Secret> GetSecret()
+        {
+            List<Secret> secrets = new List<Secret>();
+            foreach (Secret secret in _context.Secrets)
+            {
+                secrets.Add(secret);
+            }
+
+            return secrets;
+        }
+
         // GET: api/<GrandClickrDbController>
         [HttpGet]
-        public bool GetUserName(string userName, string password)
+        public async Task<ActionResult<IEnumerable<UserName>>> GetUserNames()
         {
-            return true;
+            return await _context.UserNames.ToListAsync();
+
+            
         }
 
         // GET api/<GrandClickrDbController>/5
