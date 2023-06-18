@@ -1,6 +1,7 @@
 ﻿using GrandClickr.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration.UserSecrets;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -17,37 +18,36 @@ namespace GrandClickr.Controllers
             _context = context;
         }
 
-        private List<UserName> GetUserNamesTest()
-        {
-            List<UserName> users = new List<UserName>();
-            foreach (UserName user in _context.UserNames)
-            {
-                users.Add(user);
-            }
-
-            
-
-            return users;
-        }
-
-        private List<Secret> GetSecret()
-        {
-            List<Secret> secrets = new List<Secret>();
-            foreach (Secret secret in _context.Secrets)
-            {
-                secrets.Add(secret);
-            }
-
-            return secrets;
-        }
-
         // GET: api/<GrandClickrDbController>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<UserName>>> GetUserNames()
+        [Route("Login")]
+        public bool UserLoginValidation(string userName, string password)
         {
-            return await _context.UserNames.ToListAsync();
+            int userId = 0;
+            foreach (var secret in _context.Secrets)
+            {
+                if (secret.Password == password)
+                {
+                    userId = secret.UserId;
+                }
 
-            
+                foreach (var user in _context.UserNames)
+                {
+                    if (user.Id == userId)
+                    {
+                        if (user.UserName1 == userName)
+                        {
+                            return true;
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                    }
+                }
+            }
+            return false;
+
         }
 
         // GET api/<GrandClickrDbController>/5
