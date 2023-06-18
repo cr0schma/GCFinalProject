@@ -1,7 +1,7 @@
-﻿using Azure.Storage.Blobs;
+﻿using Azure.Storage.Blobs.Models;
+using GrandClickr.Models;
+using GrandClickr.Services;
 using Microsoft.AspNetCore.Mvc;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace GrandClickr.Controllers
 {
@@ -9,48 +9,86 @@ namespace GrandClickr.Controllers
     [ApiController]
     public class AzStorageController : ControllerBase
     {
-        private IConfiguration Configuration;
+        private IConfiguration _configuration;
+        private readonly AzBlobService _azBlobService;
        
-        public AzStorageController(IConfiguration _configuration)
+        public AzStorageController(IConfiguration configuration, AzBlobService azBlobService)
         {
-            Configuration = _configuration;
+            _configuration = configuration;
+            SAStoken = _configuration["ConnectionStrings:SAStoken"];
+            _azBlobService = azBlobService;
         }
 
-        // GET: api/<AzStorageController>
-        [HttpGet]
-        public async Task<IActionResult> GetAsync(string container, string image)
+        // Variables
+        string SAStoken;
+
+        // Endpoints
+        [HttpGet("GetImages")]
+        public async Task<List<AzStorage>> GetImages(string userContainer)
         {
-            var SAStoken = Configuration["ConnectionStrings:SAStoken"];
-            string path = $"https://stgcdotnetah2023grp3.blob.core.windows.net/{container}/{image}.jpg?{SAStoken}";
+            var container = _azBlobService.GetContainer(SAStoken, userContainer.ToLower());
+            List<AzStorage> blobs = new();
+
+            await foreach (BlobItem blobItem in container.GetBlobsAsync())
+            {
+                AzStorage blob = new();
+                blob.BlobURL = $"{container.Uri}/{blobItem.Name}";
+                blob.Tags = container.GetBlobClient(blobItem.Name).GetTags().Value.Tags.Values.ToList();
+                blobs.Add(blob);
+            }
+
+            return blobs;
+        }
+        
+        [HttpGet("GetImagesByTag")]
+        public async Task<List<AzStorage>> GetImagesByTag(string userContainer, string tag)
+        {
+            var container = _azBlobService.GetContainer(SAStoken, userContainer.ToLower());
+            List<AzStorage> blobs = new();
+            string query = $"genre = '{tag.ToLower()}'";
+            foreach (TaggedBlobItem blobItem in container.FindBlobsByTags(query))
+            {
+                AzStorage blob = new();
+                blob.BlobURL = $"{container.Uri}/{blobItem.BlobName}";
+                blob.Tags = container.GetBlobClient(blobItem.BlobName).GetTags().Value.Tags.Values.ToList();
+                blobs.Add(blob);
+            }
+
+            return blobs;
+        }
+
+        [HttpPost("UploadImage")]
+        public async Task UploadImage(IFormFile image, string userContainer, string? tag = null)
+        {
+            Stream stream = image.OpenReadStream();
+            var container = _azBlobService.GetContainer(SAStoken, userContainer.ToLower());
+            string imageName = image.FileName.ToLower();
+            await container.UploadBlobAsync(imageName, stream);
             
-            // Download the private blob
-            var blob = new BlobClient(new Uri(path)).DownloadStreamingAsync();
-
-            return File(blob.Result.Value.Content, "image/jpeg");
+            // Add tag if provided
+            if (tag != null)
+            {
+                Dictionary<string, string> tags = new Dictionary<string, string>
+            {
+                { "genre", tag.ToLower() }
+            };
+                container.GetBlobClient(imageName).SetTags(tags);
+            }
         }
 
-        // GET api/<AzStorageController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpPut("AddTag")]
+        public async Task AddTag(string userContainer, string fileName, string tag)
         {
-            return "value";
+            var container = _azBlobService.GetContainer(SAStoken, userContainer.ToLower());
+            Dictionary<string, string> tags = new Dictionary<string, string>
+            {
+                { "genre", tag.ToLower() }
+            };
+            await container.GetBlobClient(fileName.ToLower()).SetTagsAsync(tags);
         }
-
-        // POST api/<AzStorageController>
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
-        }
-
-        // PUT api/<AzStorageController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/<AzStorageController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        
+        [HttpDelete("DeleteImage")]
+        public async Task DeleteImage()
         {
         }
     }
