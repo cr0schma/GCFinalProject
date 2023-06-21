@@ -47,14 +47,45 @@ namespace GrandClickr.Controllers
                 }
             }
             return false;
-
         }
 
         // GET api/<GrandClickrDbController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public bool Get(string userName, string password)
         {
-            return "value";
+            int userId = 0;
+            foreach (var secret in _context.Secrets)
+            {
+                if (secret.Password == password)
+                {
+                    userId = secret.UserId;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+                foreach (var user in _context.UserNames)
+                {
+                    if (user.Id == userId)
+                    {
+                        if (user.UserName1 == userName)
+                        {
+                            return true;
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                    }
+                else
+                {
+                    return false;
+                }
+                }
+    return false;
+            
+
         }
 
         // POST api/<GrandClickrDbController>
