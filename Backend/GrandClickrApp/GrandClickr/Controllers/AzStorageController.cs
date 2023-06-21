@@ -91,8 +91,20 @@ namespace GrandClickr.Controllers
         }
         
         [HttpDelete("DeleteImage")]
-        public async Task DeleteImage()
+        public async Task<IActionResult> DeleteImage(string userContainer, string fileName)
         {
+            var container = _azBlobService.GetContainer(SAStoken, userContainer.ToLower());
+            var blobClient = container.GetBlobClient(fileName.ToLower());
+            
+            if (await blobClient.ExistsAsync())
+            {
+                await blobClient.DeleteAsync();
+                return Ok();
+            }
+            else
+            {
+                return NotFound();
+            }
         }
     }
 }
