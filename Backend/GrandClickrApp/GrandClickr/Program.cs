@@ -1,10 +1,11 @@
-
+using GrandClickr.Services;
 using GrandClickr.Models;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddScoped<AzBlobService>();
 builder.Services.AddScoped<GrandClickrContext>();
 
 // Add Cors policy
