@@ -9,7 +9,7 @@ export class GrandClickrDbService {
 
   constructor(private http: HttpClient) { }
 
-  private readonly url = 'https://localhost:7212/api/'
+  private readonly url = 'https://grandclickr20230621220237.azurewebsites.net/api/'
 
   UserLoginValidation(userName: string, password: string): Observable<boolean>{
     return this.http.get<boolean>(this.url + 'GrandClickrDb/Login?userName='+userName+'&password='+password);
