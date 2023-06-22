@@ -5,13 +5,15 @@ import { AppComponent } from './app.component';
 import { AzStorageComponent } from './az-storage/az-storage.component';
 import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
+import { LoginPageComponent } from './login-page/login-page.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    AzStorageComponent
-  ],
-  imports: [
+    AzStorageComponent,
+    LoginPageComponent
+  ], 
+    imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,

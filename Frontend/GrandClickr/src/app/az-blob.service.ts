@@ -10,18 +10,24 @@ export class AzBlobService {
 
   constructor(private http: HttpClient) { }
 
-  private readonly url = 'https://localhost:7212/api/AzStorage/'
+  private readonly url = 'https://grandclickr20230621220237.azurewebsites.net/api/AzStorage/'
+
+  userName: string = ''
+
+  storeUserName(usernName: string){
+    this.userName = usernName.toLowerCase();
+  }
 
   getImages(): Observable<AzStorage[]> {
-    return (this.http.get<AzStorage[]>(this.url + 'GetImages?' + 'userContainer=chris'))
+    return (this.http.get<AzStorage[]>(this.url + 'GetImages?' + 'userContainer=' + this.userName))
   }
 
   addImage(imageToUpload: FormData, tag: string) {
-    return this.http.post(this.url + 'AddImage?' + 'userContainer=chris&' + 'tag=' + tag, imageToUpload)
+    return this.http.post(this.url + 'AddImage?' + 'userContainer=' + this.userName + '&' + 'tag=' + tag, imageToUpload)
   }
 
   addTag(addTag: string, fileName: string) {
-    return this.http.put(this.url + 'AddTag?' + 'userContainer=chris&' + 'fileName=' + fileName + '&tag=' + addTag, null)
+    return this.http.put(this.url + 'AddTag?' + 'userContainer=' + this.userName + '&' + 'fileName=' + fileName + '&tag=' + addTag, null)
   }
 
 }
