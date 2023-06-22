@@ -33,6 +33,16 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<AzBlobService>();
 
+builder.Services.AddCors(
+    options =>
+    {
+        options.AddPolicy(
+            name: "AllowAny",
+            builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()
+            );
+    }
+);
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

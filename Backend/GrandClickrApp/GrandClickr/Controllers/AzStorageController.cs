@@ -34,6 +34,7 @@ namespace GrandClickr.Controllers
                 AzStorage blob = new();
                 blob.BlobURL = $"{container.Uri}/{blobItem.Name}";
                 blob.Tags = container.GetBlobClient(blobItem.Name).GetTags().Value.Tags.Values.ToList();
+                blob.imageName = blobItem.Name;
                 blobs.Add(blob);
             }
 
@@ -51,14 +52,15 @@ namespace GrandClickr.Controllers
                 AzStorage blob = new();
                 blob.BlobURL = $"{container.Uri}/{blobItem.BlobName}";
                 blob.Tags = container.GetBlobClient(blobItem.BlobName).GetTags().Value.Tags.Values.ToList();
+                blob.imageName = blobItem.BlobName;
                 blobs.Add(blob);
             }
 
             return blobs;
         }
 
-        [HttpPost("UploadImage")]
-        public async Task UploadImage(IFormFile image, string userContainer, string? tag = null)
+        [HttpPost("AddImage")]
+        public async Task<bool> AddImage(IFormFile image, string userContainer, string? tag = null)
         {
             Stream stream = image.OpenReadStream();
             var container = _azBlobService.GetContainer(SAStoken, userContainer.ToLower());
@@ -74,6 +76,7 @@ namespace GrandClickr.Controllers
             };
                 container.GetBlobClient(imageName).SetTags(tags);
             }
+            return true;
         }
 
         [HttpPut("AddTag")]
