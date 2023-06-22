@@ -13,6 +13,7 @@ export class AzStorageComponent implements OnInit {
   
   constructor(private azBlobSerice:AzBlobService) {}
 
+  userName: string = this.azBlobSerice.userName
   images: AzStorage[] = [];
   results: AzStorage[] = [];
   showLoader!: boolean;
@@ -22,8 +23,10 @@ export class AzStorageComponent implements OnInit {
   addProperty!:any;
 
   ngOnInit(): void {
+    
     this.getImages();
-    this.results = this.images
+    this.results = this.images;
+
   }
 
   getImages(): void {
