@@ -21,6 +21,7 @@ export class AzStorageComponent implements OnInit {
   fileToUpload!: FormData;
   @ViewChild("fileUpload", { static: false }) fileUpload!: ElementRef;
   addProperty!:any;
+  tagImage!: string;
 
   ngOnInit(): void {
     
@@ -103,10 +104,11 @@ export class AzStorageComponent implements OnInit {
     this.formModal.show();
   }
 
-  openTagModal(){
+  openTagModal(tagImage: string){
     this.formModal = new window.bootstrap.Modal(
       document.getElementById("tagModalCenter")
     );
+    this.tagImage = tagImage;
     this.formModal.show();
   }
 
