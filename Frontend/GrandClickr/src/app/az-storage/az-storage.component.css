@@ -19,7 +19,7 @@ right: 0;
 height: 60px;
 display: flex;
 align-items: center;
-background-color: #1976d2;
+background-color: #191919;
 color: white;
 font-weight: 600;
 }
@@ -44,6 +44,16 @@ fill: white;
 }
 
 .toolbar #cloud-upload-logo:hover {
+opacity: 0.8;
+}
+
+.toolbar #logout-logo {
+height: 40px;
+margin: 0 16px;
+fill: white;
+}
+    
+.toolbar #logout-logo:hover {
 opacity: 0.8;
 }
 
