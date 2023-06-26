@@ -86,11 +86,12 @@ export class AzStorageComponent implements OnInit {
       });
   }
 
+
   deleteImage(fileName: string) {
     this.showLoader = true;
     this.azBlobService.deleteImage(fileName).subscribe({
       next: (response: any) => {
-        this.getImages();
+          this.getImages();
       },
       error: (err: any) => {
         console.error(err);
