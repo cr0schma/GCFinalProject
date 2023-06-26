@@ -38,7 +38,7 @@ export class AzStorageComponent implements OnInit {
           this.images = result
           this.results = this.images
         },
-        error: (err) => {
+        error: (err: any) => {
           console.error(err);
         },
         complete: () => {
@@ -60,7 +60,7 @@ export class AzStorageComponent implements OnInit {
               this.getImages();
             }
           },
-          error: (err) => {
+          error: (err: any) => {
             console.error(err);
             this.showLoader = false;
           },
@@ -79,13 +79,29 @@ export class AzStorageComponent implements OnInit {
         next: (response: any) => {
             this.getImages();
         },
-        error: (err) => {
+        error: (err: any) => {
           console.error(err);
         },
         complete: () => {
           this.formModal.hide()
         }
       });
+  }
+  deleteImage(fileName: string) {
+    this.showLoader = true;
+    this.azBlobSerice.deleteImage(fileName).subscribe({
+      next: (response: any) => {
+        if (response === true) {
+          this.getImages();
+        }
+      },
+      error: (err: any) => {
+        console.error(err);
+      },
+      complete: () => {
+        this.showLoader = false;
+      }
+    });
   }
 
   filterImages(searchString: string): void {

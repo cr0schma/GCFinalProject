@@ -30,4 +30,7 @@ export class AzBlobService {
     return this.http.put(this.url + 'AddTag?' + 'userContainer=' + this.userName + '&' + 'fileName=' + fileName + '&tag=' + addTag, null)
   }
 
+  deleteImage(fileName: string): Observable<any> {
+    return this.http.delete(this.url + 'DeleteImage?' + 'userContainer=' + this.userName + '&' + 'fileName=' + fileName);
+  }
 }
