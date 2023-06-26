@@ -2,7 +2,7 @@ import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { AzBlobService } from '../az-blob.service';
 import { AzStorage } from '../az-storage';
 
-declare var window:any;
+declare var window: any;
 
 @Component({
   selector: 'app-az-storage',
@@ -10,35 +10,33 @@ declare var window:any;
   styleUrls: ['./az-storage.component.css']
 })
 export class AzStorageComponent implements OnInit {
-  
-  constructor(private azBlobSerice:AzBlobService) {}
 
-  userName: string = this.azBlobSerice.userName
+  constructor(private azBlobService: AzBlobService) { }
+
+  userName: string = this.azBlobService.userName;
   images: AzStorage[] = [];
   results: AzStorage[] = [];
   showLoader!: boolean;
-  formModal:any;
+  formModal: any;
   fileToUpload!: FormData;
   @ViewChild("fileUpload", { static: false }) fileUpload!: ElementRef;
-  addProperty!:any;
+  addProperty!: any;
   tagImage!: string;
 
   ngOnInit(): void {
-    
     this.getImages();
     this.results = this.images;
-
   }
 
   getImages(): void {
     this.showLoader = true;
-    this.azBlobSerice.getImages()
+    this.azBlobService.getImages()
       .subscribe({
         next: (result: AzStorage[]) => {
-          this.images = result
-          this.results = this.images
+          this.images = result;
+          this.results = this.images;
         },
-        error: (err) => {
+        error: (err: any) => {
           console.error(err);
         },
         complete: () => {
@@ -54,57 +52,73 @@ export class AzStorageComponent implements OnInit {
       const file = fileUpload.files[0];
       let formData: FormData = new FormData();
       formData.append("image", file, file.name);
-      this.azBlobSerice.addImage(formData, tag).subscribe({
-          next: (response: any) => {
-            if (response == true) {
-              this.getImages();
-            }
-          },
-          error: (err) => {
-            console.error(err);
-            this.showLoader = false;
-          },
-          complete: () => {
-            this.formModal.hide()
+      this.azBlobService.addImage(formData, tag).subscribe({
+        next: (response: any) => {
+          if (response === true) {
+            this.getImages();
           }
-        });
+        },
+        error: (err: any) => {
+          console.error(err);
+          this.showLoader = false;
+        },
+        complete: () => {
+          this.formModal.hide();
+        }
+      });
     };
     fileUpload.click();
   }
 
-  addTag(tag: string, fileName: string){
+  addTag(tag: string, fileName: string) {
     this.showLoader = true;
-    this.azBlobSerice.addTag(tag, fileName)
+    this.azBlobService.addTag(tag, fileName)
       .subscribe({
         next: (response: any) => {
-            this.getImages();
+          this.getImages();
         },
-        error: (err) => {
+        error: (err: any) => {
           console.error(err);
         },
         complete: () => {
-          this.formModal.hide()
+          this.formModal.hide();
         }
       });
   }
 
+
+  deleteImage(fileName: string) {
+    this.showLoader = true;
+    this.azBlobService.deleteImage(fileName).subscribe({
+      next: (response: any) => {
+          this.getImages();
+      },
+      error: (err: any) => {
+        console.error(err);
+      },
+      complete: () => {
+        this.showLoader = false;
+      }
+    });
+  }
+
   filterImages(searchString: string): void {
-    this.results = this.images.filter(image => 
-        image.tags.includes(searchString.toLowerCase())
+    this.results = this.images.filter(image =>
+      image.tags.includes(searchString.toLowerCase())
     );
     if (!searchString) {
       this.results = this.images;
     }
   }
 
-  openModal(){
+  openModal() {
     this.formModal = new window.bootstrap.Modal(
       document.getElementById("uploadModal")
     );
     this.formModal.show();
   }
 
-  openTagModal(tagImage: string){
+  openTagModal(tagImage: string) {
     this.formModal = new window.bootstrap.Modal(
       document.getElementById("tagModalCenter")
     );
