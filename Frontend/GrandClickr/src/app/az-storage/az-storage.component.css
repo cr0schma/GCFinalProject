@@ -144,17 +144,18 @@ margin: 82px auto 32px;
     border-radius: 4px;
     background: #fff;
     box-shadow: 0 6px 10px rgba(0,0,0,.08), 0 0 6px rgba(0,0,0,.05);
-      transition: .3s transform cubic-bezier(.155,1.105,.295,1.12),.3s box-shadow,.3s -webkit-transform cubic-bezier(.155,1.105,.295,1.12);
+    transition: .3s transform cubic-bezier(.155,1.105,.295,1.12),.3s box-shadow,.3s -webkit-transform cubic-bezier(.155,1.105,.295,1.12);
+    width: 18rem;
   /* padding: 14px 80px 18px 36px; */
 }
 
 .tag{
-    fill:#1872cb;
+    fill:#dbdbdb;
     padding-left: 13em;
 }
 
 .tag:hover{
-    fill: orange
+    fill: #FEEE3E
 }
 
 .bin{
@@ -163,7 +164,7 @@ margin: 82px auto 32px;
 }
 
 .bin:hover{
-    fill: darkgrey;
+    fill: #FB1467;
 }
 
 .search{

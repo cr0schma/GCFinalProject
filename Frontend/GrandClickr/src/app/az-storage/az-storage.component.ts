@@ -1,6 +1,7 @@
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { AzBlobService } from '../az-blob.service';
 import { AzStorage } from '../az-storage';
+import { Router, } from '@angular/router'
 
 declare var window: any;
 
@@ -11,7 +12,7 @@ declare var window: any;
 })
 export class AzStorageComponent implements OnInit {
 
-  constructor(private azBlobService: AzBlobService) { }
+  constructor(private azBlobService: AzBlobService, private router: Router) { }
 
   userName: string = this.azBlobService.userName;
   images: AzStorage[] = [];
@@ -126,4 +127,7 @@ export class AzStorageComponent implements OnInit {
     this.formModal.show();
   }
 
+  logout() {
+    this.router.navigate([''])
+  }
 }
