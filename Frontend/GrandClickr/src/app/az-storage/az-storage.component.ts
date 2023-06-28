@@ -14,7 +14,7 @@ export class AzStorageComponent implements OnInit {
 
   constructor(private azBlobService: AzBlobService, private router: Router) { }
 
-  userName: string = this.azBlobService.userName;
+  userName: any = localStorage.getItem("userName");
   images: AzStorage[] = [];
   results: AzStorage[] = [];
   showLoader!: boolean;

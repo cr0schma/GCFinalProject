@@ -33,7 +33,7 @@ export class LoginPageComponent {
       this.grandClickerDbService.UserLoginValidation(userName, password).subscribe(result => {
         console.log(result.valueOf());
         if (result === true){
-          this.azBlobService.storeUserName(userName);
+          localStorage.setItem("userName", userName)
           this.router.navigate(['/az-storage'])
         }
       }
