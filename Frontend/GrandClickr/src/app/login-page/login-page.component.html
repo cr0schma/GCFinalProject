@@ -1,15 +1,20 @@
-
-
-<form [formGroup]="validation" (ngSubmit)="onSubmit()">
-    <div>
-      <label for="userName">Username:</label>
-      <input id="userName" type="text" formControlName="userName">
-    </div>
-    <div>
-      <label for="password">Password:</label>
-      <input id="password" type="text" formControlName="password">
-    </div>
-    <div>
-    <button type="submit">Submit</button>
-    </div>
-  </form>
+<body class="d-flex align-items-center py-4">
+  <main class="form-signin w-100 m-auto">
+    <form [formGroup]="validation" (ngSubmit)="onSubmit()">
+      <img class="mx-auto d-block" src="https://stgcdotnetah2023grp3.blob.core.windows.net/resources/GC.png" alt="" width="200" height="200">
+      <h1 class="h3 mb-3 fw-normal" style="color: white;">Please sign in</h1>
+    
+      <div class="form-floating">
+        <input type="email" class="form-control" id="userName" placeholder="Username" formControlName="userName">
+        <label for="userName">Username</label>
+      </div>
+    
+      <div class="form-floating">
+        <input type="password" class="form-control" id="password" placeholder="Password" formControlName="password">
+        <label for="password">Password</label>
+      </div>
+    
+      <button class="btn btn-primary w-100 py-2" type="submit" style="background-color: #FB1467; border-color: #FB1467;">Sign in</button>
+    </form>
+  </main>
+</body>
