@@ -1,6 +1,6 @@
 # Grand Clickr
 
-An image hosting platform
+A cloud video game image hosting platform
 
 ## Authors
 
@@ -8,17 +8,8 @@ An image hosting platform
 - [@AAPullen](https://github.com/AAPullen)
 - [@ASn0wden](https://github.com/ASn0wden)
 
-## Project Structure
-
-```shell
-├── README.md
-├── Test
-│   ├── Test.txt
-│
-├── Test
-│   ├── Test
-```
-
 ## App Operation
 
-* test
+* User is presented with login screen
+* They are then shown the images that are stored in their corresponding blob container
+* The user is given the ability to search, tag, upload, and delete the image of their choosing
