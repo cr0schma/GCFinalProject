@@ -5,6 +5,8 @@ import { LoginInfo } from '../login-info';
 import { Router, } from '@angular/router'
 import { AzBlobService } from '../az-blob.service';
 
+declare var window: any;
+
 @Component({
   selector: 'app-login-page',
   templateUrl: './login-page.component.html',
@@ -20,6 +22,14 @@ export class LoginPageComponent {
   }
 
   validation: FormGroup;
+  toastNotification: any;
+  
+  toastTrigger() {
+    this.toastNotification = new window.bootstrap.Toast(
+      document.getElementById("liveToast")
+    );
+    this.toastNotification.show();
+  }
 
   onSubmit() {
 
@@ -31,10 +41,12 @@ export class LoginPageComponent {
       const password: string = loginInfo.password;
 
       this.grandClickerDbService.UserLoginValidation(userName, password).subscribe(result => {
-        console.log(result.valueOf());
         if (result === true){
           localStorage.setItem("userName", userName)
           this.router.navigate(['/az-storage'])
+        }
+        if (result === false){
+          this.toastTrigger()
         }
       }
       );
