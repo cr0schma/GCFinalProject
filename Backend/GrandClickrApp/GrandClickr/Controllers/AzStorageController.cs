@@ -80,13 +80,20 @@ namespace GrandClickr.Controllers
         }
 
         [HttpPut("AddTag")]
-        public async Task AddTag(string userContainer, string fileName, string tag)
+        public async Task AddTag(string userContainer, string fileName, string? tag)
         {
             var container = _azBlobService.GetContainer(SAStoken, userContainer.ToLower());
-            Dictionary<string, string> tags = new Dictionary<string, string>
+            Dictionary<string, string> tags = new Dictionary<string, string>();
+            
+            if (tag != null)
             {
-                { "genre", tag.ToLower() }
-            };
+                tags.Add("genre", tag.ToLower());
+            }
+            else
+            {
+                tags.Add("genre", "");
+            }
+
             await container.GetBlobClient(fileName.ToLower()).SetTagsAsync(tags);
         }
         

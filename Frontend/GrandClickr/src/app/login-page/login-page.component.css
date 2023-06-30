@@ -32,4 +32,10 @@ body {
 .form-control:focus {
     border-color: #191919;
     box-shadow: none;
-} 
+}
+
+.toast {
+  background-color: #FB1467;
+  color: white;
+  max-width: fit-content;
+}
